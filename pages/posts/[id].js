@@ -7,7 +7,7 @@ export default function Post({ postData }) {
   return (
     <>
       <Head>
-        <title>{postData.title}</title>
+        <title>Post List</title>
       </Head>
       <div className={utilStyles.table_container}>
         <h3 className={utilStyles.table_heading}>

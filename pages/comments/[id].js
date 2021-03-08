@@ -7,7 +7,7 @@ export default function Comments({ commentsData }) {
   return (
     <>
       <Head>
-        <title>{commentsData.title}</title>
+        <title>Comment List</title>
       </Head>
       <div className={utilStyles.table_container}>
         <h3 className={utilStyles.table_heading}>
