@@ -1,65 +1,71 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import utilStyles from "../styles/utils.module.css";
+import Link from "next/link";
 
-export default function Home() {
+import { getUserList } from "../lib/api";
+
+export default function Home({ userList }) {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Blog Everything</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <h1 className={utilStyles.heading}>Blog with NextJS</h1>
+      <p className={utilStyles.heading_text}>
+        This Data is populating from JSONPlaceholder API
+      </p>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+      <div className={utilStyles.table_container}>
+        <h3 className={utilStyles.table_heading}>
+          Users List -{" "}
+          <span>
+            <p className={utilStyles.table_heading_extra}>
+              Click on the Username to get posts related to that User
             </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+          </span>
+        </h3>
+        {userList ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Sl No</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userList.map(({ id, name, username, email }) => {
+                return (
+                  <tr key={Math.random()}>
+                    <td>{id}</td>
+                    <td>
+                      {" "}
+                      <Link href={`/posts/${id}`}>
+                        <a>{name}</a>
+                      </Link>
+                    </td>
+                    <td>{username}</td>
+                    <td>{email}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <p className={utilStyles.heading_text}>Loading Users</p>
+        )}
+      </div>
     </div>
-  )
+  );
+}
+
+export async function getStaticProps() {
+  const userList = await getUserList();
+  return {
+    props: {
+      userList,
+    },
+  };
 }
